@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+     <head>
+         <title>nearBy Search using google Javascript API</title>
+         <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+         <meta charset="utf-8">
+         <style>
+             html,body{
+                 height:100%;
+             }
+             #map{
+                 height:60%;
+             }
+         </style>
+    </head>
+    <body>
+        <div id="map"></div>
+
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBrVC6uCioycmoof96Opj8smN-R4ZW36GU&libraries=places"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script>
+            //set mapOptions
+            var myLatLng = {lat:13.0456969,lng:77.5669571};
+            var mapOptions = {
+                center:myLatLng,
+                zoom:15,
+                mapTypeId:google.maps.MapTypeId.ROADMAP
+            };
+            var map=new google.maps.Map(document.getElementById('map'),mapOptions);
+            
+            var infoWindow = new google.maps.InfoWindow();
+
+            //define a request, the location must be defined using google.maps.LatLng
+            
+            var lottegollahalli = new google.maps.LatLng(13.0456969,77.5669571);
+            var request = {
+                location:lottegollahalli,
+                radius:'500',
+                types:['store']
+            }
+            
+            //create a places service Object before we using nearBySearch method
+            var service = new google.maps.places.PlacesService(map);
+            service.nearbySearch(request,callback);
+            
+            function callback(result,status){
+                if(status == google.maps.places.PlacesServiceStatus.OK){
+                  // console.log(result);
+                    for(var i=0;i<result.length;i++){
+                        addMarker(result[i]);
+                    }
+                }
+            }
+            
+            function addMarker(place){
+                var marker = new google.maps.Marker({
+                   map:map,
+                   position:place.geometry.location,
+                   animation:google.maps.Animation.DROP
+                });
+                google.maps.event.addListener(marker,"click",function(){
+                    infoWindow.setContent(place.name);
+                    infoWindow.open(map,this);
+                });
+            }
+            
+        </script>
+    </body>
+</html>

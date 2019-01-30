@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+     <head>
+         <title>nearBy Search using google Javascript API</title>
+         <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+         <meta charset="utf-8">
+         <style>
+             html,body{
+                 height:100%;
+             }
+             #map{
+                 height:60%;
+             }
+         </style>
+    </head>
+    <body>
+        <div id="map"></div>
+        <input type="text" id="cityInput" placeholder="City">
+
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBrVC6uCioycmoof96Opj8smN-R4ZW36GU&libraries=places"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script>
+            //set mapOptions
+            var myLatLng = {lat:13.0456969,lng:77.5669571};
+            var mapOptions = {
+                center:myLatLng,
+                zoom:15,
+                mapTypeId:google.maps.MapTypeId.ROADMAP
+            };
+            var map=new google.maps.Map(document.getElementById('map'),mapOptions);
+            
+            var input = document.getElementById('cityInput');
+            var options={
+                types:['(cities)']
+            }
+            var autoComplete = new google.maps.places.Autocomplete(input,options);
+            
+            autoComplete.addListener('place_changed',onPlaceChanged);
+            
+            function onPlaceChanged(){
+               // window.alert(autoComplete.getPlace());
+                var place = autoComplete.getPlace();
+                map.panTo(place.geometry.location);
+            }
+            
+        </script>
+    </body>
+</html>

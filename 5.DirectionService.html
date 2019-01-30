@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+     <head>
+         <title>Direction Service</title>
+         <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+         <meta charset="utf-8">
+         <style>
+             html,body{
+                 height:100%;
+             }
+             #map{
+                 height:60%;
+             }
+         </style>
+    </head>
+    <body>
+        <div id="map"></div>
+        <button onclick="calculateRoute();">Calculate Route</button>
+
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBrVC6uCioycmoof96Opj8smN-R4ZW36GU"></script>
+        <script>
+            //set mapOptions
+            var myLatLng = {lat:51.5,lng:-0.1};
+            var mapOptions = {
+                center:myLatLng,
+                zoom:7,
+                mapTypeId:google.maps.MapTypeId.SATELLITE
+            };
+            var map=new google.maps.Map(document.getElementById('map'),mapOptions);
+            map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
+            
+            var directionService = new google.maps.DirectionsService();
+            
+            var directionsDisplay = new google.maps.DirectionsRenderer();
+            
+            directionsDisplay.setMap(map);
+            
+            function calculateRoute(){
+                var request ={
+                    origin:"Banglore",
+                    destination:"Bagalkote",
+                    travelMode:google.maps.TravelMode.DRIVING,
+                    unitSystem:google.maps.UnitSystem.METRIC
+                }
+                
+                directionService.route(request,function(result,status){
+                    if(status == google.maps.DirectionsStatus.OK){
+                        console.log(result);
+                        window.alert("The travelling distance is"+ result.routes[0].legs[0].distance.text + ".<br />The travelling time is:" + 
+                            result.routes[0].legs[0].duration.text + ".");
+                        
+                       directionsDisplay.setDirections(result); 
+                    }
+                });
+            }
+            
+
+            
+        </script>
+    </body>
+</html>

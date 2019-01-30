@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+     <head>
+         <title>Geocoding using Javascript API</title>
+         <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+         <meta charset="utf-8">
+         <style>
+             html,body{
+                 height:100%;
+             }
+             #map{
+                 height:60%;
+             }
+         </style>
+    </head>
+    <body>
+        <div id="map"></div>
+        <input type="text" placeholder="Address" id="address">
+        <button onclick="geocodeAddress();">geocode Address</button>
+
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBrVC6uCioycmoof96Opj8smN-R4ZW36GU"></script>
+        <script>
+            //set mapOptions
+            var myLatLng = {lat:51.5,lng:-0.1};
+            var mapOptions = {
+                center:myLatLng,
+                zoom:7,
+                mapTypeId:google.maps.MapTypeId.SATELLITE
+            };
+            var map=new google.maps.Map(document.getElementById('map'),mapOptions);
+            map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
+            
+            var geoCoder = new google.maps.Geocoder();
+            
+            
+            function geocodeAddress(){
+                var request = {
+                    'address':document.getElementById("address").value
+                }
+                geoCoder.geocode(request,function(results,status){
+                    if(status === google.maps.GeocoderStatus.OK){
+                        console.log(results);
+                        window.alert("Address coordinates: "+results[0].geometry.location);
+                        map.setCenter(results[0].geometry.location);
+                        var marker = new google.maps.Marker({
+                            map:map,
+                            position:results[0].geometry.location
+                        });
+                    }else{
+                        window.alert("GeoCode not successful: "+ status)
+                    }
+                });
+            }
+            
+        </script>
+    </body>
+</html>
